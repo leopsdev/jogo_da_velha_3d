@@ -107,14 +107,14 @@ void mouseMotion(int x, int y) {
     glutPostRedisplay(); // Redesenha a tela
 }
 void lighting() {
-    float position[4] = {2.0f, 2.0f, 2.0f, 1.0f};
+    float position[4] = {0.0f, 0.0f, 0.0f, 1.0f};
     float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     float black[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
     glLightfv(GL_LIGHT0, GL_POSITION, position);
     glLightfv(GL_LIGHT0, GL_AMBIENT, black);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);  //aparencia mais realista
+    glLightfv(GL_LIGHT0, GL_SPECULAR, white);  //um ponto muito expecifico
 
     glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.5f);
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5f);
@@ -137,7 +137,9 @@ void init() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(2.0, 1.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(  2.0, 1.0, -5.0, 
+                0.0, 0.0, 0.0, 
+                0.0, 1.0, 0.0);
 
     addObject(1.4, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(1.1, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
@@ -157,7 +159,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Configura material do tabuleiro
-    float kd[4] = {0.8f, 0.5f, 0.2f, 1.0f};
+    float kd[4] = {0.8f, 0.5f, 0.2f, 0.0f};
     float ks[4] = {0.5f, 0.5f, 0.5f, 0.5f};
     float ns = 50.0f;
 
