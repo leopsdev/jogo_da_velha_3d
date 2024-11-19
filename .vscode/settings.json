@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "objeto.h": "c",
+        "glut.h": "c"
+    }
+}
