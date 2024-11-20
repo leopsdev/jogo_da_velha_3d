@@ -8,6 +8,7 @@ float cameraDistance = 5.0f; // Distância da câmera
 float cameraAngleX = 0.0f, cameraAngleY = 0.0f; // Ângulos de rotação
 int isDragging = 0; // Estado de arrastar o mouse
 int lastMouseX, lastMouseY; // Última posição do mouse
+int objetoSelecionado = 0;
 
 void drawCube(float x, float y, float z, float size, float r, float g, float b) {
     glPushMatrix(); // Salva a matriz atual
@@ -144,17 +145,40 @@ void init() {
                 0.0, 1.0, 0.0);
 
     addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
     addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
     
     lighting();
+}
+
+void drawEspacos(/* tabuleiro*/) {
+    // Configura material do tabuleiro
+    float kd[4] = {0.2f, 0.6f, 0.8f, 0.0f};
+    float ks[4] = {0.5f, 0.5f, 0.5f, 0.5f};
+    float ns = 50.0f;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, ks);
+    glMaterialf(GL_FRONT, GL_SHININESS, ns);
+
+
+    //tabuleiro[0][0][3]== quadrante mais a esquerda
+    // Desenha o plano (tabuleiro)
+    glBegin(GL_QUADS);
+        glVertex3f(0.1f, 0.01f, 0.1f);
+        glVertex3f(0.1f, 0.01f, 0.4f);
+        glVertex3f(0.4f, 0.01f, 0.4f);
+        glVertex3f(0.4f, 0.01f, 0.1f);
+    glEnd();
+
+
 }
 
 void display() {
@@ -181,6 +205,11 @@ void display() {
     glDisable(GL_LIGHTING); // Desativa a iluminação para as linhas
     glColor3f(1.0f, 1.0f, 1.0f); // Define a cor branca para as linhas
 
+    if (objetoSelecionado =! 0)
+    {
+        // função de desenhar espaços disponiveis
+    }
+    
 
     glLineWidth(4.0f);
     glBegin(GL_LINES);
@@ -199,7 +228,7 @@ void display() {
 
     // Desenha objetos
     drawObjects();
-
+    drawEspacos(/* tabuleiro*/);
     glutSwapBuffers();
 }
 
@@ -214,6 +243,7 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutMouseFunc(mouseControl);
     glutMotionFunc(mouseMotion);
+    //glutKeyboardFunc(keyboard);
     glutReshapeFunc(reshape);
     glutMainLoop();
 
