@@ -45,7 +45,7 @@ void updateCamera() {
     gluLookAt(cameraDistance * sin(cameraAngleY) * cos(cameraAngleX), // Posição X da câmera
               cameraDistance * sin(cameraAngleX),                    // Posição Y da câmera
               cameraDistance * cos(cameraAngleY) * cos(cameraAngleX), // Posição Z da câmera
-              0.0, 0.0, 0.0, // Ponto para onde a câmera aponta
+              0.75, 0.75, 0.75, // Ponto para onde a câmera aponta
               0.0, 1.0, 0.0); // Vetor "up"
 }
 
@@ -109,7 +109,7 @@ void mouseMotion(int x, int y) {
     glutPostRedisplay(); // Redesenha a tela
 }
 void lighting() {
-    float position[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+    float position[4] = {0.75f, 0.75f, 0.75f, 1.0f};
     float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     float black[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
@@ -140,19 +140,19 @@ void init() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(  2.0, 1.0, -5.0, 
-                0.0, 0.0, 0.0, 
+                0.75, 0.75, 0.75, 
                 0.0, 1.0, 0.0);
 
-    addObject(1.4, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(1.1, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.8, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.5, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.2, 0.1, 1.3, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(-1.4, 0.1, 1.3, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(-1.1, 0.1, 1.3, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(-0.8, 0.1, 1.3, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(-0.5, 0.1, 1.3, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(-0.2, 0.1, 1.3, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
+    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
+    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
+    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
+    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
+    addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
     
     lighting();
 }
@@ -171,10 +171,10 @@ void display() {
 
     // Desenha o plano (tabuleiro)
     glBegin(GL_QUADS);
-        glVertex3f(-1.7f, 0.0f, -1.7f);
-        glVertex3f(1.7f, 0.0f, -1.7f);
-        glVertex3f(1.7f, 0.0f, 1.7f);
-        glVertex3f(-1.7f, 0.0f, 1.7f);
+        glVertex3f(-0.95f, 0.0f, -0.95f);
+        glVertex3f(2.45f, 0.0f, -0.95f);
+        glVertex3f(2.45f, 0.0f, 2.45f);
+        glVertex3f(-0.95f, 0.0f, 2.45f);
     glEnd();
 
     // Desenha as linhas do tabuleiro
@@ -184,14 +184,15 @@ void display() {
 
     glLineWidth(4.0f);
     glBegin(GL_LINES);
-        glVertex3f(-1.0f, 0.01f, -0.33f);
-        glVertex3f(1.0f, 0.01f, -0.33f);
-        glVertex3f(-1.0f, 0.01f, 0.33f);
-        glVertex3f(1.0f, 0.01f, 0.33f);
-        glVertex3f(-0.33f, 0.01f, -1.0f);
-        glVertex3f(-0.33f, 0.01f, 1.0f);
-        glVertex3f(0.33f, 0.01f, -1.0f);
-        glVertex3f(0.33f, 0.01f, 1.0f);
+        glVertex3f(0.0f, 0.01f, 0.5f); // linhas horizontais
+        glVertex3f(1.5f, 0.01f, 0.5f);
+        glVertex3f(0.0f, 0.01f, 1.0f);
+        glVertex3f(1.5f, 0.01f, 1.0f);
+
+        glVertex3f(0.5f, 0.01f, 0.0f); // linhas verticais
+        glVertex3f(0.5f, 0.01f, 1.5f);
+        glVertex3f(1.0f, 0.01f, 0.0f);
+        glVertex3f(1.0f, 0.01f, 1.5f);
     glEnd();
 
     glEnable(GL_LIGHTING); // Reativa a iluminação
