@@ -1,6 +1,11 @@
 #ifndef OBJETO_H
 #define OBJETO_H
 
+#define BUFSIZE 512
+
+// Identificador de objetos
+enum {OBJ_CUBE = 1, OBJ_SPHERE = 2};
+
 typedef struct {
     int id;         // Identificador único do objeto
     int type;       // Tipo de objeto (1 = cubo, 2 = esfera)

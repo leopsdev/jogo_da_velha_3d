@@ -11,6 +11,7 @@ int lastMouseX, lastMouseY; // Última posição do mouse
 
 void drawCube(float x, float y, float z, float size, float r, float g, float b) {
     glPushMatrix(); // Salva a matriz atual
+    glLoadName(OBJ_CUBE);
     glTranslatef(x, y, z); // Translada para a posição desejada
     float obj_kd[4] = {r, g, b, 1.0f};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, obj_kd);
@@ -20,6 +21,7 @@ void drawCube(float x, float y, float z, float size, float r, float g, float b) 
 
 void drawSphere(float x, float y, float z, float radius, float r, float g, float b) {
     glPushMatrix(); // Salva a matriz atual
+    glLoadName(OBJ_SPHERE);
     glTranslatef(x, y, z); // Translada para a posição desejada
     float obj_kd[4] = {r, g, b, 1.0f};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, obj_kd);
@@ -169,10 +171,10 @@ void display() {
 
     // Desenha o plano (tabuleiro)
     glBegin(GL_QUADS);
-        glVertex3f(-1.5f, 0.0f, -1.5f);
-        glVertex3f(1.5f, 0.0f, -1.5f);
-        glVertex3f(1.5f, 0.0f, 1.5f);
-        glVertex3f(-1.5f, 0.0f, 1.5f);
+        glVertex3f(-1.7f, 0.0f, -1.7f);
+        glVertex3f(1.7f, 0.0f, -1.7f);
+        glVertex3f(1.7f, 0.0f, 1.7f);
+        glVertex3f(-1.7f, 0.0f, 1.7f);
     glEnd();
 
     // Desenha as linhas do tabuleiro
