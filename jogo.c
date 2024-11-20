@@ -160,8 +160,8 @@ void init() {
 
 void drawEspacos(/* tabuleiro*/) {
     // Configura material do tabuleiro
-    float kd[4] = {0.2f, 0.6f, 0.8f, 0.0f};
-    float ks[4] = {0.5f, 0.5f, 0.5f, 0.5f};
+    float kd[4] = {0.5f, 0.6f, 0.8f, 0.0f};
+    float ks[4] = {0.0f, 0.5f, 0.5f, 0.5f};
     float ns = 50.0f;
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kd);
@@ -202,13 +202,21 @@ void display() {
     glEnd();
 
     // Desenha as linhas do tabuleiro
-    glDisable(GL_LIGHTING); // Desativa a iluminação para as linhas
-    glColor3f(1.0f, 1.0f, 1.0f); // Define a cor branca para as linhas
+    //glDisable(GL_LIGHTING); // Desativa a iluminação para as linhas
+    //glColor3f(1.0f, 1.0f, 1.0f); // Define a cor branca para as linhas
 
     if (objetoSelecionado =! 0)
     {
         // função de desenhar espaços disponiveis
     }
+
+    float kdd[4] = {1.0f, 1.0f, 1.0f, 0.0f};
+    float kss[4] = {1.0f, 1.0f, 1.0f, 0.5f};
+    float nss = 50.0f;
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, kdd);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, kss);
+    glMaterialf(GL_FRONT, GL_SHININESS, nss);
     
 
     glLineWidth(4.0f);
@@ -224,7 +232,7 @@ void display() {
         glVertex3f(1.0f, 0.01f, 1.5f);
     glEnd();
 
-    glEnable(GL_LIGHTING); // Reativa a iluminação
+    //glEnable(GL_LIGHTING); // Reativa a iluminação
 
     // Desenha objetos
     drawObjects();
