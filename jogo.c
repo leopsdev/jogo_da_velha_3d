@@ -1,14 +1,22 @@
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include <math.h>
+#include <stdbool.h>
 #include "objeto.h"
+#include "jogo_da_velha.h"
 
 // Variáveis de controle de câmera
 float cameraDistance = 5.0f; // Distância da câmera
-float cameraAngleX = 0.0f, cameraAngleY = 0.0f; // Ângulos de rotação
+float cameraAngleX = 0.75f, cameraAngleY = 0.75f; // Ângulos de rotação
 int isDragging = 0; // Estado de arrastar o mouse
 int lastMouseX, lastMouseY; // Última posição do mouse
 int objetoSelecionado = 0;
+
+// Variáveis de controle do jogo
+float tabuleiro[TAM][TAM][TAM+1];
+int jogadorAtual = 1;
+bool jogoAtivo = true;
+float x, y;
 
 void drawCube(float x, float y, float z, float size, float r, float g, float b) {
     glPushMatrix(); // Salva a matriz atual
@@ -46,7 +54,7 @@ void updateCamera() {
     gluLookAt(cameraDistance * sin(cameraAngleY) * cos(cameraAngleX), // Posição X da câmera
               cameraDistance * sin(cameraAngleX),                    // Posição Y da câmera
               cameraDistance * cos(cameraAngleY) * cos(cameraAngleX), // Posição Z da câmera
-              0.75, 0.75, 0.75, // Ponto para onde a câmera aponta
+              0.75, 0.0, 0.75, // Ponto para onde a câmera aponta
               0.0, 1.0, 0.0); // Vetor "up"
 }
 
@@ -131,6 +139,10 @@ void lighting() {
 }
 
 void init() {
+    
+
+    //inicializarTabuleiro(tabuleiro);
+
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // fundo branco
     glEnable(GL_DEPTH_TEST);
 
@@ -141,7 +153,7 @@ void init() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(  2.0, 1.0, -5.0, 
-                0.75, 0.75, 0.75, 
+                0.75, 0.0, 0.75, 
                 0.0, 1.0, 0.0);
 
     addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
@@ -158,7 +170,7 @@ void init() {
     lighting();
 }
 
-void drawEspacos(/* tabuleiro*/) {
+void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
     // Configura material do tabuleiro
     float kd[4] = {0.5f, 0.6f, 0.8f, 0.0f};
     float ks[4] = {0.0f, 0.5f, 0.5f, 0.5f};
@@ -171,12 +183,27 @@ void drawEspacos(/* tabuleiro*/) {
 
     //tabuleiro[0][0][3]== quadrante mais a esquerda
     // Desenha o plano (tabuleiro)
-    glBegin(GL_QUADS);
-        glVertex3f(0.1f, 0.01f, 0.1f);
-        glVertex3f(0.1f, 0.01f, 0.4f);
-        glVertex3f(0.4f, 0.01f, 0.4f);
-        glVertex3f(0.4f, 0.01f, 0.1f);
-    glEnd();
+
+    for (int j = 0; j < 3; j++)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (tabuleiro[j][i][3] == 0)
+            {
+                glBegin(GL_QUADS);
+                    glVertex3f(0.1f + (j*0.5), 0.01f, 0.1f + (i*0.5));
+                    glVertex3f(0.1f + (j*0.5), 0.01f, 0.4f + (i*0.5));
+                    glVertex3f(0.4f + (j*0.5), 0.01f, 0.4f + (i*0.5));
+                    glVertex3f(0.4f + (j*0.5), 0.01f, 0.1f + (i*0.5));
+                glEnd();
+            }
+        }
+    }
+    
+    
+    
+
+    
 
 
 }
@@ -236,7 +263,7 @@ void display() {
 
     // Desenha objetos
     drawObjects();
-    drawEspacos(/* tabuleiro*/);
+    drawEspacos(tabuleiro);
     glutSwapBuffers();
 }
 

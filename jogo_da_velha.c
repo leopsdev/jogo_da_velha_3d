@@ -1,10 +1,6 @@
+#include "jogo_da_velha.h"
 #include <stdio.h>
 #include <stdbool.h>
-
-#define TAM 3
-#define PONTO_INICIAL_X 0.0
-#define PONTO_INICIAL_Y 0.0
-#define LADO 0.5
 
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
 void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
@@ -12,40 +8,40 @@ void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, flo
 bool verificarVencedor(float tabuleiro[TAM][TAM][TAM+1], float simbolo);
 bool verificarEmpate(float tabuleiro[TAM][TAM][TAM+1]);
 
-int main() {
-    float tabuleiro[TAM][TAM][TAM+1];
-    int jogadorAtual = 1;
-    bool jogoAtivo = true;
-    float x, y;
+// int main() {
+//     float tabuleiro[TAM][TAM][TAM+1];
+//     int jogadorAtual = 1;
+//     bool jogoAtivo = true;
+//     float x, y;
 
-    inicializarTabuleiro(tabuleiro);
+//     inicializarTabuleiro(tabuleiro);
 
-    while (jogoAtivo) {
-        exibirTabuleiro(tabuleiro);
-        printf("\nJogador %d, insira as coordenadas (x y): ", jogadorAtual);
-        scanf("%f %f", &x, &y);
+//     while (jogoAtivo) {
+//         exibirTabuleiro(tabuleiro);
+//         printf("\nJogador %d, insira as coordenadas (x y): ", jogadorAtual);
+//         scanf("%f %f", &x, &y);
 
-        realizarJogada(tabuleiro, jogadorAtual, &x, &y);
+//         realizarJogada(tabuleiro, jogadorAtual, &x, &y);
 
-        if (verificarVencedor(tabuleiro, jogadorAtual)) {
-            exibirTabuleiro(tabuleiro);
-            printf("\nJogador %d venceu!\n", jogadorAtual);
-            jogoAtivo = false;
-            break;
-        }
+//         if (verificarVencedor(tabuleiro, jogadorAtual)) {
+//             exibirTabuleiro(tabuleiro);
+//             printf("\nJogador %d venceu!\n", jogadorAtual);
+//             jogoAtivo = false;
+//             break;
+//         }
 
-        if (verificarEmpate(tabuleiro)) {
-            exibirTabuleiro(tabuleiro);
-            printf("\nO jogo terminou em empate!\n");
-            jogoAtivo = false;
-            break;
-        }
+//         if (verificarEmpate(tabuleiro)) {
+//             exibirTabuleiro(tabuleiro);
+//             printf("\nO jogo terminou em empate!\n");
+//             jogoAtivo = false;
+//             break;
+//         }
 
-        jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
-    }
+//         jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]) {
     float aux_x = PONTO_INICIAL_X;
