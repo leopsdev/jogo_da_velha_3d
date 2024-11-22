@@ -1,6 +1,6 @@
 #include "jogo_da_velha.h"
-#include <stdio.h>
-#include <stdbool.h>
+
+
 
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
 void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);

@@ -254,6 +254,32 @@ void init() {
     addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
     
     lighting();
+
+    inicializarTabuleiro(tabuleiro);
+
+    // while (jogoAtivo) {
+    //     exibirTabuleiro(tabuleiro);
+    //     //printf("\nJogador %d, insira as coordenadas (x y): ", jogadorAtual);
+    //     //scanf("%f %f", &x, &y);
+
+    //     realizarJogada(tabuleiro, jogadorAtual, &x, &y);
+
+    //     if (verificarVencedor(tabuleiro, jogadorAtual)) {
+    //         exibirTabuleiro(tabuleiro);
+    //         printf("\nJogador %d venceu!\n", jogadorAtual);
+    //         jogoAtivo = false;
+    //         break;
+    //     }
+
+    //     if (verificarEmpate(tabuleiro)) {
+    //         exibirTabuleiro(tabuleiro);
+    //         printf("\nO jogo terminou em empate!\n");
+    //         jogoAtivo = false;
+    //         break;
+    //     }
+
+    //     jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
+    // }
 }
 
 void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
@@ -350,7 +376,7 @@ void display() {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(700, 700);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Tabuleiro 3D - Jogo da Velha");
 
