@@ -1,6 +1,6 @@
 #ifndef OBJETO_H
 #define OBJETO_H
-
+#include <stdbool.h>
 #define BUFSIZE 512
 
 // Identificador de objetos
@@ -17,9 +17,11 @@ typedef struct {
 
 extern Object objects[12]; // Declaração de um array de objetos
 extern int objectCount;    // Declaração do número de objetos
+// Variáveis de controle de seleção e arraste
+
 
 void addObject(float x, float y, float z, float r, float g, float b, float sizeOrRadius, int type);
 void translateSelectedObject(float dx, float dy, float dz);
-void selectObject(float mouseX, float mouseY);
+
 
 #endif

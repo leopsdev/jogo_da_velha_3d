@@ -2,15 +2,22 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "objeto.h"
 #include "jogo_da_velha.h"
+#include <float.h>
+#define BUFSIZE 512
+
 
 // Variáveis de controle de câmera
 float cameraDistance = 5.0f; // Distância da câmera
 float cameraAngleX = 0.75f, cameraAngleY = 0.75f; // Ângulos de rotação
 int isDragging = 0; // Estado de arrastar o mouse
 int lastMouseX, lastMouseY; // Última posição do mouse
-int objetoSelecionado = 0;
+int objetoSelecionado = 0; // 0 para não; 1 para cubo; 2 para esfera
+int contagemRounds = 0;
+bool isDraggingObject = false;
+int selectedObjectIndex = -1; // Índice do objeto atualmente selecionado
 
 // Variáveis de controle do jogo
 float tabuleiro[TAM][TAM][TAM+1];
@@ -36,6 +43,62 @@ void drawSphere(float x, float y, float z, float radius, float r, float g, float
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, obj_kd);
     glutSolidSphere(radius, 20, 20); // Desenha uma esfera sólida
     glPopMatrix(); // Restaura a matriz original
+}
+
+
+void selectObject(int mouseX, int mouseY) {
+    GLint viewport[4];
+    GLdouble modelview[16], projection[16];
+    GLfloat winX, winY, winZ;
+    GLdouble posX, posY, posZ;
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+    winX = (float)mouseX;
+    winY = (float)viewport[3] - (float)mouseY;
+    glReadPixels(mouseX, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+
+    gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+    // Lógica de seleção baseada na distância
+    float closestDistance = FLT_MAX; // Inicializa com a maior distância possível
+    int closestIndex = -1;
+
+    for (int i = 0; i < objectCount; i++) {
+        float dx = objects[i].x - posX;
+        float dy = objects[i].y - posY;
+        float dz = objects[i].z - posZ;
+        float distance = sqrt(dx * dx + dy * dy + dz * dz);
+
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = i;
+        }
+    }
+
+    // Atualiza o objeto selecionado
+    for (int i = 0; i < objectCount; i++) {
+        objects[i].isSelected = 0; // Desmarca todos os objetos
+    }
+
+    if (closestIndex != -1) {
+        objects[closestIndex].isSelected = 1; // Marca o objeto mais próximo como selecionado
+        printf("Objeto selecionado: ID %d, Tipo %d, Distância %.2f\n",
+               objects[closestIndex].id, objects[closestIndex].type, closestDistance);
+    } else {
+        printf("Nenhum objeto selecionado.\n");
+    }
+}
+
+// Atualizar a posição do objeto arrastado
+void moveSelectedObject(float x, float y, float z) {
+    if (selectedObjectIndex >= 0 && selectedObjectIndex < objectCount) {
+        objects[selectedObjectIndex].x = x;
+        objects[selectedObjectIndex].y = y;
+        objects[selectedObjectIndex].z = z;
+    }
 }
 
 void drawObjects() {
@@ -93,13 +156,10 @@ void mouseControl(int button, int state, int x, int y) {
         } else {
             isDragging = 0;
         }
-    } else if (button == GLUT_LEFT_BUTTON)
-    {
+    } if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN)
         {
-            lastMouseX = x;
-            lastMouseY = y;
-            selectObject(lastMouseX, lastMouseY);
+            selectObject(x, y); // Chama a função de seleção ao clicar com o botão esquerdo
         }
     }
 }
@@ -114,6 +174,32 @@ void mouseMotion(int x, int y) {
         lastMouseX = x;
         lastMouseY = y;
     }
+
+    // Atualiza a posição do objeto selecionado
+    for (int i = 0; i < objectCount; i++) {
+        if (objects[i].isSelected && isDragging == 0) {
+            GLint viewport[4];
+            GLdouble modelview[16], projection[16];
+            GLfloat winX, winY, winZ;
+            GLdouble posX, posY, posZ;
+
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+            glGetDoublev(GL_PROJECTION_MATRIX, projection);
+
+            winX = (float)x;
+            winY = (float)viewport[3] - (float)y;
+            glReadPixels(x, (int)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+
+            gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+            // Atualiza a posição do objeto selecionado
+            objects[i].x = posX;
+            objects[i].z = posZ; // Atualiza apenas X e Z para movimento no plano
+            break;
+        }
+    }
+
     updateCamera();
     glutPostRedisplay(); // Redesenha a tela
 }
@@ -131,7 +217,7 @@ void lighting() {
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5f);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.1f);
 
-    float global_ambient[4] = {0.3f, 0.3f, 0.3f, 1.0f};
+    float global_ambient[4] = {0.5f, 0.5f, 0.5f, 1.0f};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
     glEnable(GL_LIGHTING);
@@ -199,12 +285,6 @@ void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
             }
         }
     }
-    
-    
-    
-
-    
-
 
 }
 
