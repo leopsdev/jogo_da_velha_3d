@@ -5,6 +5,7 @@
 Object objects[12];   // Inicialização do array de objetos
 int objectCount = 0;  // Inicialização do contador de objetos
 
+
 void addObject(float x, float y, float z, float r, float g, float b, float sizeOrRadius, int type) {
     if (objectCount >= 12) {
         printf("Limite de objetos atingido!\n");
@@ -24,19 +25,6 @@ void addObject(float x, float y, float z, float r, float g, float b, float sizeO
     objectCount++;
 }
 
-void selectObject(float mouseX, float mouseY) {
-    for (int i = 0; i < objectCount; i++) {
-        if (fabs(mouseX - objects[i].x) < 0.2f && fabs(mouseY - objects[i].y) < 0.2f) {
-            objects[i].isSelected = 1; // Marca o objeto como selecionado
-            objects->color[0] = 0.0f;
-            objects->color[1] = 0.0f;
-            objects->color[2] = 1.0f;
-            printf("Objeto %d selecionado\n", objects[i].id);
-        } else {
-            objects[i].isSelected = 0; // Desmarca os outros objetos
-        }
-    }
-}
 
 void translateSelectedObject(float dx, float dy, float dz) {
     for (int i = 0; i < objectCount; i++) {
