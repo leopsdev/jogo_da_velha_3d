@@ -25,6 +25,22 @@ int jogadorAtual = 1;
 bool jogoAtivo = true;
 float x, y;
 
+void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], bool jogoAtivo, int jogadorAtual, float* x, float* y){
+    if (jogoAtivo) {
+        realizarJogada(tabuleiro, jogadorAtual, x, y);
+
+        if (verificarVencedor(tabuleiro, jogadorAtual)) {
+            jogoAtivo = false;
+        }
+
+        if (verificarEmpate(tabuleiro)) {
+            jogoAtivo = false;
+        }
+
+        jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
+    }
+}
+
 void drawCube(float x, float y, float z, float size, float r, float g, float b) {
     glPushMatrix(); // Salva a matriz atual
     glLoadName(OBJ_CUBE);
@@ -161,7 +177,30 @@ void mouseControl(int button, int state, int x, int y) {
         {
             selectObject(x, y); // Chama a função de seleção ao clicar com o botão esquerdo
         }
+        if(state == GLUT_UP){
+            int ind = -1;
+            for(int i = 0; i < objectCount; i++){
+                if(objects[i].isSelected == 1){
+                    ind = i;
+                    break;
+                }
+            }
+
+            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, jogadorAtual, &objects[ind].x, &objects[ind].z);
+            ind = -1;
+        
+        }
     }
+}
+
+void keyboard(int key) {
+    switch (key) {
+        case ' ':
+            translateSelectedObject(0.0f, 0.1f, 0.0f); // Mover para cima
+            contagemRounds++;
+            break;
+    }
+    glutPostRedisplay();
 }
 
 void mouseMotion(int x, int y) {
@@ -174,7 +213,6 @@ void mouseMotion(int x, int y) {
         lastMouseX = x;
         lastMouseY = y;
     }
-
     // Atualiza a posição do objeto selecionado
     for (int i = 0; i < objectCount; i++) {
         if (objects[i].isSelected && isDragging == 0) {
@@ -199,7 +237,7 @@ void mouseMotion(int x, int y) {
             break;
         }
     }
-
+    
     updateCamera();
     glutPostRedisplay(); // Redesenha a tela
 }
@@ -225,10 +263,6 @@ void lighting() {
 }
 
 void init() {
-    
-
-    //inicializarTabuleiro(tabuleiro);
-
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // fundo branco
     glEnable(GL_DEPTH_TEST);
 
@@ -256,30 +290,6 @@ void init() {
     lighting();
 
     inicializarTabuleiro(tabuleiro);
-
-    // while (jogoAtivo) {
-    //     exibirTabuleiro(tabuleiro);
-    //     //printf("\nJogador %d, insira as coordenadas (x y): ", jogadorAtual);
-    //     //scanf("%f %f", &x, &y);
-
-    //     realizarJogada(tabuleiro, jogadorAtual, &x, &y);
-
-    //     if (verificarVencedor(tabuleiro, jogadorAtual)) {
-    //         exibirTabuleiro(tabuleiro);
-    //         printf("\nJogador %d venceu!\n", jogadorAtual);
-    //         jogoAtivo = false;
-    //         break;
-    //     }
-
-    //     if (verificarEmpate(tabuleiro)) {
-    //         exibirTabuleiro(tabuleiro);
-    //         printf("\nO jogo terminou em empate!\n");
-    //         jogoAtivo = false;
-    //         break;
-    //     }
-
-    //     jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
-    // }
 }
 
 void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
@@ -368,6 +378,7 @@ void display() {
     //glEnable(GL_LIGHTING); // Reativa a iluminação
 
     // Desenha objetos
+    
     drawObjects();
     drawEspacos(tabuleiro);
     glutSwapBuffers();
@@ -384,7 +395,8 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display);
     glutMouseFunc(mouseControl);
     glutMotionFunc(mouseMotion);
-    //glutKeyboardFunc(keyboard);
+    
+    glutKeyboardFunc(keyboard);
     glutReshapeFunc(reshape);
     glutMainLoop();
 
