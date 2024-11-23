@@ -1,47 +1,10 @@
 #include "jogo_da_velha.h"
 
-
-
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
 void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
-void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, float* y);
+void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int* jogador, float* x, float* y);
 bool verificarVencedor(float tabuleiro[TAM][TAM][TAM+1], float simbolo);
 bool verificarEmpate(float tabuleiro[TAM][TAM][TAM+1]);
-
-//int main() {
-//     float tabuleiro[TAM][TAM][TAM+1];
-//     int jogadorAtual = 1;
-//     bool jogoAtivo = true;
-//     float x, y;
-
-//     inicializarTabuleiro(tabuleiro);
-
-//     while (jogoAtivo) {
-//         exibirTabuleiro(tabuleiro);
-//         printf("\nJogador %d, insira as coordenadas (x y): ", jogadorAtual);
-//         scanf("%f %f", &x, &y);
-
-//         realizarJogada(tabuleiro, jogadorAtual, &x, &y);
-
-//         if (verificarVencedor(tabuleiro, jogadorAtual)) {
-//             exibirTabuleiro(tabuleiro);
-//             printf("\nJogador %d venceu!\n", jogadorAtual);
-//             jogoAtivo = false;
-//             break;
-//         }
-
-//         if (verificarEmpate(tabuleiro)) {
-//             exibirTabuleiro(tabuleiro);
-//             printf("\nO jogo terminou em empate!\n");
-//             jogoAtivo = false;
-//             break;
-//         }
-
-//         jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
-//     }
-
-//    return 0;
-//}
 
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]) {
     float aux_x = PONTO_INICIAL_X;
@@ -60,7 +23,7 @@ void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]) {
     }
 }
 
-void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, float* z) {
+void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int* jogador, float* x, float* z) {
     int pos_tab_x = -1, pos_tab_z = -1;
     
     while (true) {
@@ -82,7 +45,6 @@ void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, flo
             }
             if (pos_tab_z != -1 || pos_tab_x != -1) break;
         }
-        printf("%f %f", x, z);
         // Verificar se a posição está ocupada
         if ((int)tabuleiro[pos_tab_x][pos_tab_z][3] != 0) {
             printf("Posição já ocupada! Insira novas coordenadas (x y): ");
@@ -97,12 +59,8 @@ void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, flo
     *x = PONTO_INICIAL_X + pos_tab_x * LADO + LADO / 2;
     *z = PONTO_INICIAL_Y + pos_tab_z * LADO + LADO / 2;
 
-    tabuleiro[pos_tab_x][pos_tab_z][3] = jogador;
-}
-
-
-void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]) {
-    for (int i = 0; i < TAM; i++) for (int j = 0; j < TAM; j++) printf(" %f ", tabuleiro[i][j][3]);
+    tabuleiro[pos_tab_x][pos_tab_z][3] = *jogador;
+    printf("\n\n%d %d %f\n\n", pos_tab_x, pos_tab_z, tabuleiro[pos_tab_x][pos_tab_z][3]);
 }
 
 bool verificarVencedor(float tabuleiro[TAM][TAM][TAM+1], float simbolo) {

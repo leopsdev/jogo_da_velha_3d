@@ -9,7 +9,7 @@
 #include <stdio.h> 
 
 void inicializarTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
-void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int jogador, float* x, float* z);
+void realizarJogada(float tabuleiro[TAM][TAM][TAM+1], int* jogador, float* x, float* z);
 void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
 void exibirTabuleiro(float tabuleiro[TAM][TAM][TAM+1]);
 bool verificarVencedor(float tabuleiro[TAM][TAM][TAM+1], float simbolo);

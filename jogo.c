@@ -22,22 +22,26 @@ int selectedObjectIndex = -1; // Índice do objeto atualmente selecionado
 // Variáveis de controle do jogo
 float tabuleiro[TAM][TAM][TAM+1];
 int jogadorAtual = 1;
-bool jogoAtivo = true;
+int jogoAtivo = 1;
+int empate = 0;
 float x, y;
 
-void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], bool jogoAtivo, int jogadorAtual, float* x, float* y){
-    if (jogoAtivo) {
+void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAtual, float* x, float* y){
+    if (jogoAtivo == 1) {
         realizarJogada(tabuleiro, jogadorAtual, x, y);
 
-        if (verificarVencedor(tabuleiro, jogadorAtual)) {
-            jogoAtivo = false;
+        if (verificarVencedor(tabuleiro, *jogadorAtual)) {
+            jogoAtivo = 0;
         }
 
         if (verificarEmpate(tabuleiro)) {
-            jogoAtivo = false;
+            jogoAtivo = 0;
+            empate = 1;
         }
 
-        jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
+        *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
+
+        if(jogoAtivo == 0 || empate == 1) glutLeaveMainLoop();
     }
 }
 
@@ -104,7 +108,6 @@ void selectObject(int mouseX, int mouseY) {
         if (objects[closestIndex].type == OBJ_SPHERE && contagemRounds%2 == 0 || objects[closestIndex].type == OBJ_CUBE && contagemRounds%2 != 0)
         {
             objects[closestIndex].isSelected = 1; // Marca o objeto mais próximo como selecionado
-            printf("Objeto selecionado: ID %d, Tipo %d, Distância %.2f\n", objects[closestIndex].id, objects[closestIndex].type, closestDistance);
         } else {
             printf("Não é o turno desse jogador!\n");
         }
@@ -133,14 +136,13 @@ void drawObjects() {
     }
 }
 
-
 void updateCamera() {
     glLoadIdentity();
-    gluLookAt(cameraDistance * sin(cameraAngleY) * cos(cameraAngleX), // Posição X da câmera
-              cameraDistance * sin(cameraAngleX),                    // Posição Y da câmera
-              cameraDistance * cos(cameraAngleY) * cos(cameraAngleX), // Posição Z da câmera
-              0.75, 0.0, 0.75, // Ponto para onde a câmera aponta
-              0.0, 1.0, 0.0); // Vetor "up"
+    gluLookAt(cameraDistance * sin(cameraAngleY) * cos(cameraAngleX),
+              cameraDistance * sin(cameraAngleX),                    
+              cameraDistance * cos(cameraAngleY) * cos(cameraAngleX), 
+              0.75, 0.0, 0.75, 
+              0.0, 1.0, 0.0); 
 }
 
 void reshape(int width, int height) {
@@ -192,7 +194,7 @@ void mouseControl(int button, int state, int x, int y) {
                 }
             }
 
-            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, jogadorAtual, &objects[ind].x, &objects[ind].z);
+            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z);
             objects[ind].movido = 1;
             ind = -1;
         
@@ -247,6 +249,7 @@ void mouseMotion(int x, int y) {
     updateCamera();
     glutPostRedisplay(); // Redesenha a tela
 }
+
 void lighting() {
     float position[4] = {0.75f, 0.75f, 0.75f, 1.0f};
     float white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -309,7 +312,7 @@ void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
     glMaterialf(GL_FRONT, GL_SHININESS, ns);
 
 
-    //tabuleiro[0][0][3]== quadrante mais a esquerda
+    //tabuleiro[0][0][3] == quadrante mais a esquerda
     // Desenha o plano (tabuleiro)
 
     for (int j = 0; j < 3; j++)
@@ -327,7 +330,6 @@ void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
             }
         }
     }
-
 }
 
 void display() {
@@ -387,6 +389,7 @@ void display() {
     
     drawObjects();
     drawEspacos(tabuleiro);
+
     glutSwapBuffers();
 }
 
