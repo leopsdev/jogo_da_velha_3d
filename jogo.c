@@ -99,10 +99,16 @@ void selectObject(int mouseX, int mouseY) {
         objects[i].isSelected = 0; // Desmarca todos os objetos
     }
 
-    if (closestIndex != -1) {
-        objects[closestIndex].isSelected = 1; // Marca o objeto mais próximo como selecionado
-        printf("Objeto selecionado: ID %d, Tipo %d, Distância %.2f\n",
-               objects[closestIndex].id, objects[closestIndex].type, closestDistance);
+    if (closestIndex != -1 && objects[closestIndex].movido == 0) {
+        
+        if (objects[closestIndex].type == OBJ_SPHERE && contagemRounds%2 == 0 || objects[closestIndex].type == OBJ_CUBE && contagemRounds%2 != 0)
+        {
+            objects[closestIndex].isSelected = 1; // Marca o objeto mais próximo como selecionado
+            printf("Objeto selecionado: ID %d, Tipo %d, Distância %.2f\n", objects[closestIndex].id, objects[closestIndex].type, closestDistance);
+        } else {
+            printf("Não é o turno desse jogador!\n");
+        }
+        
     } else {
         printf("Nenhum objeto selecionado.\n");
     }
@@ -187,6 +193,7 @@ void mouseControl(int button, int state, int x, int y) {
             }
 
             if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, jogadorAtual, &objects[ind].x, &objects[ind].z);
+            objects[ind].movido = 1;
             ind = -1;
         
         }
@@ -196,7 +203,6 @@ void mouseControl(int button, int state, int x, int y) {
 void keyboard(int key) {
     switch (key) {
         case ' ':
-            translateSelectedObject(0.0f, 0.1f, 0.0f); // Mover para cima
             contagemRounds++;
             break;
     }
@@ -276,16 +282,16 @@ void init() {
                 0.75, 0.0, 0.75, 
                 0.0, 1.0, 0.0);
 
-    addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
-    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1);
-    addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2);
+    addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0 );
+    addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
+    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
+    addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
+    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
+    addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2 ,0);
+    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
+    addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
+    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
+    addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
     
     lighting();
 

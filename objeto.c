@@ -6,7 +6,7 @@ Object objects[12];   // Inicialização do array de objetos
 int objectCount = 0;  // Inicialização do contador de objetos
 
 
-void addObject(float x, float y, float z, float r, float g, float b, float sizeOrRadius, int type) {
+void addObject(float x, float y, float z, float r, float g, float b, float sizeOrRadius, int type, int movido) {
     if (objectCount >= 12) {
         printf("Limite de objetos atingido!\n");
         return;
@@ -22,6 +22,7 @@ void addObject(float x, float y, float z, float r, float g, float b, float sizeO
     objects[objectCount].sizeOrRadius = sizeOrRadius;
     objects[objectCount].type = type;
     objects[objectCount].isSelected = 0; // Inicialmente não selecionado
+    objects[objectCount].movido = movido;
     objectCount++;
 }
 
