@@ -17,6 +17,7 @@ typedef struct {
     int movido; // 0 = nao movido, 1 = movido
     float x_inicial;
     float z_inicial;
+    float angle, velocity;
 } Object;
 
 extern Object objects[12]; // Declaração de um array de objetos
