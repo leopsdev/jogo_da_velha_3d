@@ -38,8 +38,9 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAt
             jogoAtivo = 0;
             empate = 1;
         }
-
-        *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
+        
+        
+        if(*x != x_inicial && *y != z_inicial) *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
 
         if(jogoAtivo == 0 && empate == 0){
             if (contagemRounds % 2 != 0)
@@ -66,12 +67,7 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAt
             printf("aperte");
             printf("\033[1;37m'x'\033[0m");
             printf("para fechar o jogo\n");
-        }
-
-        
-
-        
-        
+        }  
     }
 }
 
@@ -244,11 +240,16 @@ void mouseControl(int button, int state, int x, int y) {
             if (objects[ind].x > 0.0 && objects[ind].z > 0.0 && objects[ind].x < 1.5 && objects[ind].z < 1.5 )
             {
                 if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
-                objects[ind].movido = 1;
+
+                if(objects[ind].x != objects[ind].x_inicial && objects[ind].z != objects[ind].z_inicial) objects[ind].movido = 1;
+                else contagemRounds--;
+
                 objects[ind].color[0] = objects[ind].colorOG[0]; // Desmarca todos os objetos
                 objects[ind].color[1] = objects[ind].colorOG[1]; // Desmarca todos os objetos
                 objects[ind].color[2] = objects[ind].colorOG[2]; // Desmarca todos os objetos
+
                 ind = -1;
+                
             }
             
             
@@ -262,7 +263,6 @@ void keyboard(int key) {
         case ' ':
             if (empate == 0 && jogoAtivo == 1){
                 contagemRounds++;
-                //jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
                 if (jogadorAtual == 1)
                 {   
                     printf("\033[1;32mVez do jogador 1\n\033[0m\n");
