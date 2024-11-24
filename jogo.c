@@ -349,7 +349,11 @@ void lighting() {
 
 void init() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // fundo branco
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);  //teste de profundidade
+
+    //remoçao de faces ocultas
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
