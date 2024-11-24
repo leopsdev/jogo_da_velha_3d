@@ -41,7 +41,16 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAt
 
         *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
 
-        if(jogoAtivo == 0 || empate == 1) glutLeaveMainLoop();
+        if(jogoAtivo == 0){
+            
+            printf("Jogador %d venceu!\n", *jogadorAtual);
+            
+        }
+        if (empate == 1)
+        {
+            printf("Empate!\n");
+        }
+        
     }
 }
 
@@ -115,6 +124,20 @@ void selectObject(int mouseX, int mouseY) {
     } else {
         printf("Nenhum objeto selecionado.\n");
     }
+}
+void reinicia (){
+    addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0 );
+    addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
+    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
+    addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
+    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
+    addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2 ,0);
+    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
+    addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
+    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
+    addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
+
+    inicializarTabuleiro(tabuleiro);
 }
 
 // Atualizar a posição do objeto arrastado
@@ -193,10 +216,15 @@ void mouseControl(int button, int state, int x, int y) {
                     break;
                 }
             }
-
-            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
-            objects[ind].movido = 1;
-            ind = -1;
+            if (objects[ind].x > 0.0 && objects[ind].z > 0.0 && objects[ind].x < 1.5 && objects[ind].z < 1.5 )
+            {
+                if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
+                objects[ind].movido = 1;
+                ind = -1;
+            }
+            
+            
+        
         }
     }
 }
@@ -206,6 +234,11 @@ void keyboard(int key) {
         case ' ':
             contagemRounds++;
             break;
+        case 'x':
+            glutLeaveMainLoop();
+            break;
+        case 'r':
+            reinicia();
     }
     glutPostRedisplay();
 }
