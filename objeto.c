@@ -23,6 +23,9 @@ void addObject(float x, float y, float z, float r, float g, float b, float sizeO
     objects[objectCount].type = type;
     objects[objectCount].isSelected = 0; // Inicialmente não selecionado
     objects[objectCount].movido = movido;
+    objects[objectCount].x_inicial = x;
+    objects[objectCount].z_inicial = z;
+
     objectCount++;
 }
 

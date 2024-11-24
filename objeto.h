@@ -14,6 +14,8 @@ typedef struct {
     float sizeOrRadius; // Tamanho ou raio do objeto
     int isSelected; // Indica se o objeto está selecionado (1 = sim, 0 = não)
     int movido; // 0 = nao movido, 1 = movido
+    float x_inicial;
+    float z_inicial;
 } Object;
 
 extern Object objects[12]; // Declaração de um array de objetos

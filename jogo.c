@@ -26,9 +26,9 @@ int jogoAtivo = 1;
 int empate = 0;
 float x, y;
 
-void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAtual, float* x, float* y){
+void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAtual, float* x, float* y, float x_inicial, float z_inicial){
     if (jogoAtivo == 1) {
-        realizarJogada(tabuleiro, jogadorAtual, x, y);
+        realizarJogada(tabuleiro, jogadorAtual, x, y, x_inicial, z_inicial);
 
         if (verificarVencedor(tabuleiro, *jogadorAtual)) {
             jogoAtivo = 0;
@@ -194,10 +194,9 @@ void mouseControl(int button, int state, int x, int y) {
                 }
             }
 
-            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z);
+            if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
             objects[ind].movido = 1;
             ind = -1;
-        
         }
     }
 }
