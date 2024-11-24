@@ -4,6 +4,7 @@
         "glut.h": "c",
         "stdbool.h": "c",
         "stdio.h": "c",
-        "jogo_da_velha.h": "c"
+        "jogo_da_velha.h": "c",
+        "float.h": "c"
     }
 }

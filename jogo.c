@@ -41,15 +41,36 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM+1], int jogoAtivo, int* jogadorAt
 
         *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
 
-        if(jogoAtivo == 0){
-            
-            printf("Jogador %d venceu!\n", *jogadorAtual);
-            
+        if(jogoAtivo == 0 && empate == 0){
+            if (contagemRounds % 2 != 0)
+            {
+                printf("\033[1;31mjogador 2 VENCEU!\n\033[0m\n");
+            } else
+            {
+                printf("\033[1;32mjogador 1 VENCEU!\n\033[0m\n");
+            }
+                printf("aperte");
+                printf("\033[1;37m'r'\033[0m");
+                printf("para reiniciar o jogo\n");
+                printf("aperte");
+                printf("\033[1;37m'x'\033[0m");
+                printf("para fechar o jogo\n");
+
         }
         if (empate == 1)
         {
-            printf("Empate!\n");
+            printf("\033[1;37mDeu VELHA!\n\033[0m\n");
+            printf("aperte");
+            printf("\033[1;37m'r'\033[0m");
+            printf("para reiniciar o jogo\n");
+            printf("aperte");
+            printf("\033[1;37m'x'\033[0m");
+            printf("para fechar o jogo\n");
         }
+
+        
+
+        
         
     }
 }
@@ -110,6 +131,7 @@ void selectObject(int mouseX, int mouseY) {
     // Atualiza o objeto selecionado
     for (int i = 0; i < objectCount; i++) {
         objects[i].isSelected = 0; // Desmarca todos os objetos
+        
     }
 
     if (closestIndex != -1 && objects[closestIndex].movido == 0) {
@@ -126,6 +148,10 @@ void selectObject(int mouseX, int mouseY) {
     }
 }
 void reinicia (){
+    objectCount = 0;
+    contagemRounds = 0;
+    jogadorAtual = 1;
+
     addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0 );
     addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
     addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
@@ -175,7 +201,6 @@ void reshape(int width, int height) {
 
     // Configura o viewport para cobrir toda a janela
     glViewport(0, 0, width, height);
-
     // Configura a projeção para manter a proporção
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -220,6 +245,9 @@ void mouseControl(int button, int state, int x, int y) {
             {
                 if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
                 objects[ind].movido = 1;
+                objects[ind].color[0] = objects[ind].colorOG[0]; // Desmarca todos os objetos
+                objects[ind].color[1] = objects[ind].colorOG[1]; // Desmarca todos os objetos
+                objects[ind].color[2] = objects[ind].colorOG[2]; // Desmarca todos os objetos
                 ind = -1;
             }
             
@@ -232,12 +260,25 @@ void mouseControl(int button, int state, int x, int y) {
 void keyboard(int key) {
     switch (key) {
         case ' ':
-            contagemRounds++;
+            if (empate == 0 && jogoAtivo == 1){
+                contagemRounds++;
+                //jogadorAtual = (jogadorAtual == 1) ? 2 : 1;
+                if (jogadorAtual == 1)
+                {   
+                    printf("\033[1;32mVez do jogador 1\n\033[0m\n");
+                } else
+                {
+                    printf("\033[1;31mVez do jogador 2\n\033[0m\n");
+                }
+
+            } 
+            
             break;
         case 'x':
             glutLeaveMainLoop();
             break;
         case 'r':
+            system("clear");
             reinicia();
     }
     glutPostRedisplay();
@@ -274,6 +315,9 @@ void mouseMotion(int x, int y) {
             // Atualiza a posição do objeto selecionado
             objects[i].x = posX;
             objects[i].z = posZ; // Atualiza apenas X e Z para movimento no plano
+            objects[i].color[0] = 0.0f; 
+            objects[i].color[1] = 1.0f; 
+            objects[i].color[2] = 1.0f; 
             break;
         }
     }
@@ -317,20 +361,19 @@ void init() {
                 0.75, 0.0, 0.75, 
                 0.0, 1.0, 0.0);
 
-    addObject(1.4, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0 );
-    addObject(1.4, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
-    addObject(1.1, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
-    addObject(1.1, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2, 0);
-    addObject(0.8, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
-    addObject(0.8, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2 ,0);
-    addObject(0.5, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1,0);
-    addObject(0.5, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
-    addObject(0.2, 0.1, 2.0, 1.0f, 0.0f, 0.0f, 0.2f, 1, 0);
-    addObject(0.2, 0.1, -0.5, 0.0f, 1.0f, 0.0f, 0.12f, 2,0);
-    
+    reinicia();
+
     lighting();
 
-    inicializarTabuleiro(tabuleiro);
+    if (jogadorAtual == 1)
+    {
+        printf("\033[1;32mVez do jogador 1\n\033[0m\n");
+    } else
+    {
+        printf("\033[1;31mVez do jogador 2\n\033[0m\n");
+    }
+    
+    
 }
 
 void drawEspacos(float tabuleiro[TAM][TAM][TAM+1]) {
@@ -421,6 +464,8 @@ void display() {
     
     drawObjects();
     drawEspacos(tabuleiro);
+
+    
 
     glutSwapBuffers();
 }

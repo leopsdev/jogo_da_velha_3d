@@ -25,7 +25,10 @@ void addObject(float x, float y, float z, float r, float g, float b, float sizeO
     objects[objectCount].movido = movido;
     objects[objectCount].x_inicial = x;
     objects[objectCount].z_inicial = z;
-
+    objects[objectCount].colorOG[0] = r;
+    objects[objectCount].colorOG[1] = g;
+    objects[objectCount].colorOG[2] = b;
+    objects[objectCount].colorOG[3] = 1.0f;
     objectCount++;
 }
 

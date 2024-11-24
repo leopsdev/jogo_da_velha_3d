@@ -11,6 +11,7 @@ typedef struct {
     int type;       // Tipo de objeto (1 = cubo, 2 = esfera)
     float x, y, z;  // Coordenadas do objeto
     float color[4]; // Cor do objeto
+    float colorOG[4];
     float sizeOrRadius; // Tamanho ou raio do objeto
     int isSelected; // Indica se o objeto está selecionado (1 = sim, 0 = não)
     int movido; // 0 = nao movido, 1 = movido
