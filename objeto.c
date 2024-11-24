@@ -29,6 +29,8 @@ void addObject(float x, float y, float z, float r, float g, float b, float sizeO
     objects[objectCount].colorOG[1] = g;
     objects[objectCount].colorOG[2] = b;
     objects[objectCount].colorOG[3] = 1.0f;
+    objects[objectCount].angle = 0.0f;
+    objects[objectCount].velocity = 1.0f;
     objectCount++;
 }
 
