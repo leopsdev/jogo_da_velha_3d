@@ -42,9 +42,9 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM + 1], int jogoAtivo, int *jogador
             jogoAtivo = 0;
             empate = 1;
         }
-        
-        
-        if(*x != x_inicial && *y != z_inicial) *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
+
+        if (*x != x_inicial && *y != z_inicial)
+            *jogadorAtual = (*jogadorAtual == 1) ? 2 : 1;
 
         if (jogoAtivo == 0 && empate == 0)
         {
@@ -58,26 +58,12 @@ void jogoDaVelha(float tabuleiro[TAM][TAM][TAM + 1], int jogoAtivo, int *jogador
                 printf("\033[1;32mjogador 1 VENCEU!\n\033[0m\n");
             }
 
-            printf("aperte");
-            printf("\033[1;37m'r'\033[0m");
-            printf("para reiniciar o jogo\n");
-            printf("aperte");
-            printf("\033[1;37m'x'\033[0m");
-            printf("para fechar o jogo\n");
-
             tempoReiniciar();
         }
         if (empate == 1)
         {
             anima = 1;
             printf("\033[1;37mDeu VELHA!\n\033[0m\n");
-            printf("aperte");
-            printf("\033[1;37m'r'\033[0m");
-            printf("para reiniciar o jogo\n");
-            printf("aperte");
-            printf("\033[1;37m'x'\033[0m");
-            printf("para fechar o jogo\n");
-
 
             tempoReiniciar();
         }
@@ -108,9 +94,10 @@ void drawSphere(float x, float y, float z, float radius, float r, float g, float
 
 void drawDecoracoes()
 {
-    // Objeto 1: Teapot
+    // Objeto 1: Cone
     glPushMatrix();
     glTranslatef(5.0, 0.0, 0.0);
+    glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
     float kd_teapot[4] = {0.0f, 0.5f, 1.0f, 1.0f}; // Azul escuro
     float ks_teapot[4] = {0.5f, 0.5f, 0.5f, 1.0f};
     float ns_teapot = 50.0f;
@@ -119,13 +106,13 @@ void drawDecoracoes()
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_teapot);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_teapot);
 
-    glutSolidTeapot(1.0);
+    glutSolidCone(0.5, 1.0, 20, 20);
     glPopMatrix();
 
     // Objeto 2: Cone
     glPushMatrix();
     glTranslatef(2.0, 0.0, -4.0);
-    float kd_cone[4] = {0.8f, 0.1f, 0.4f, 1.0f}; // Laranja
+    float kd_cone[4] = {0.8f, 0.1f, 0.4f, 1.0f};
     float ks_cone[4] = {0.3f, 0.3f, 0.3f, 1.0f};
     float ns_cone = 90.0f;
 
@@ -147,7 +134,7 @@ void drawDecoracoes()
     glMaterialfv(GL_FRONT, GL_SPECULAR, ks_sphere);
     glMaterialf(GL_FRONT, GL_SHININESS, ns_sphere);
 
-    glutSolidTeacup(1.0);
+    glutSolidTetrahedron();
     glPopMatrix();
 
     // Objeto 4: Colher
@@ -178,12 +165,12 @@ void drawDecoracoes()
     glTranslatef(-2.0f, 0.0f, 2.0f);
 
     GLUquadric *quad = gluNewQuadric();
-    gluCylinder(quad, 0.5, 0.5, 2.0, 20, 20); // Base, topo, altura, segmentos
+    glutSolidCylinder( 0.5, 1.0, 20, 20);
     gluDeleteQuadric(quad);
 
     glPopMatrix();
 
-    // Objeto 6: Piramide
+    // Objeto 6: isoedro
     float kd_piramide[4] = {0.9f, 0.6f, 0.1f, 1.0f}; // Amarelo
     float ks_piramide[4] = {0.8f, 0.8f, 0.8f, 1.0f};
     float ns_piramide = 90.0f;
@@ -194,41 +181,7 @@ void drawDecoracoes()
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -3.0f);
-
-    glBegin(GL_TRIANGLES);
-    // Frente
-    glNormal3f(0.0f, 0.5f, 0.5f);
-    glVertex3f(0.0f, 1.0f, 0.0f);  // Topo
-    glVertex3f(-1.0f, 0.0f, 1.0f); // Base esquerda
-    glVertex3f(1.0f, 0.0f, 1.0f);  // Base direita
-
-    // Direita
-    glNormal3f(0.5f, 0.5f, 0.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, -1.0f);
-
-    // Traseira
-    glNormal3f(0.0f, 0.5f, -0.5f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-
-    // Esquerda
-    glNormal3f(-0.5f, 0.5f, 0.0f);
-    glVertex3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glBegin(GL_QUADS);
-    // Base
-    glNormal3f(0.0f, -1.0f, 0.0f);
-    glVertex3f(-1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(1.0f, 0.0f, -1.0f);
-    glVertex3f(-1.0f, 0.0f, -1.0f);
-    glEnd();
+    glutSolidIcosahedron();
 
     glPopMatrix();
 }
@@ -237,6 +190,7 @@ void tempoReiniciar()
 {
     for (int i = 10; i >= 0; i--)
     {
+
         printf("\033[1;37mO jogo será reiniciado em %d\n\033[0m\n", i);
         sleep(1);
     }
@@ -414,21 +368,22 @@ void mouseControl(int button, int state, int x, int y)
             if (objects[ind].x > 0.0 && objects[ind].z > 0.0 && objects[ind].x < 1.5 && objects[ind].z < 1.5)
             {
 
-                if(ind != -1) jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
+                if (ind != -1)
+                    jogoDaVelha(tabuleiro, jogoAtivo, &jogadorAtual, &objects[ind].x, &objects[ind].z, objects[ind].x_inicial, objects[ind].z_inicial);
 
-                if(objects[ind].x != objects[ind].x_inicial && objects[ind].z != objects[ind].z_inicial) objects[ind].movido = 1;
-                else contagemRounds--;
+                if (objects[ind].x != objects[ind].x_inicial && objects[ind].z != objects[ind].z_inicial)
+                    objects[ind].movido = 1;
+                else
+                    contagemRounds--;
                 objects[ind].color[0] = objects[ind].colorOG[0]; // Desmarca todos os objetos
                 objects[ind].color[1] = objects[ind].colorOG[1]; // Desmarca todos os objetos
                 objects[ind].color[2] = objects[ind].colorOG[2]; // Desmarca todos os objetos
 
                 ind = -1;
-                
             }
         }
     }
 }
-
 
 void keyboard(int key)
 {
@@ -533,11 +488,16 @@ void lighting()
 void init()
 {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // fundo branco
-    glEnable(GL_DEPTH_TEST);  //teste de profundidade
+    glEnable(GL_DEPTH_TEST);              // teste de profundidade
 
-    //remoçao de faces ocultas
+    // Habilitar remoção de superfícies ocultas
     glEnable(GL_CULL_FACE);
+
+    // Configure a face traseira como as que devem ser descartadas
     glCullFace(GL_BACK);
+
+    // Definir o padrão de vértices como horário (se necessário)
+    glFrontFace(GL_CCW); // Use GL_CCW se o padrão for anti-horário
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -616,35 +576,38 @@ void display()
 
     // Desenha o plano (tabuleiro)
     glBegin(GL_QUADS);
-    glVertex3f(-0.95f, 0.0f, -0.95f); // vertice inferior esquerdo
-    glVertex3f(2.45f, 0.0f, -0.95f);  // vertice inferior direito
-    glVertex3f(2.45f, 0.0f, 2.45f);   // vertice superior direito
-    glVertex3f(-0.95f, 0.0f, 2.45f);  // vertice superior esquerdo
 
-    glVertex3f(2.45f, -0.1f, -0.95f);  // vertice inferior esquerdo
-    glVertex3f(-0.95f, -0.1f, -0.95f); // vertice inferior direito
-    glVertex3f(-0.95f, 0.0f, -0.95f);  // vertice superior direito
-    glVertex3f(2.45f, 0.0f, -0.95f);   // vertice superior esquerdo
+    // Face superior (anti-horário visto de cima)
+    glVertex3f(-0.95f, 0.0f, -0.95f);
+    glVertex3f(-0.95f, 0.0f, 2.45f);
+    glVertex3f(2.45f, 0.0f, 2.45f);
+    glVertex3f(2.45f, 0.0f, -0.95f);
 
-    glVertex3f(-0.95f, -0.1f, 2.45f); // vertice inferior esquerdo
-    glVertex3f(2.45f, -0.1f, 2.45f);  // vertice inferior direito
-    glVertex3f(2.45f, 0.0f, 2.45f);   // vertice superior direito
-    glVertex3f(-0.95f, 0.0f, 2.45f);  // vertice superior esquerdo
+    // Face inferior (anti-horário visto de baixo)
+    glVertex3f(-0.95f, -0.1f, -0.95f);
+    glVertex3f(2.45f, -0.1f, -0.95f);
+    glVertex3f(2.45f, -0.1f, 2.45f);
+    glVertex3f(-0.95f, -0.1f, 2.45f);
 
-    glVertex3f(2.45f, -0.1f, 2.45f);  // vertice inferior esquerdo
-    glVertex3f(2.45f, -0.1f, -0.95f); // vertice inferior direito
-    glVertex3f(2.45f, 0.0f, -0.95f);  // vertice superior direito
-    glVertex3f(2.45f, 0.0f, 2.45f);   // vertice superior esquerdo
+    glVertex3f(-0.95f, -0.1f, -0.95f); // Inferior esquerdo
+    glVertex3f(-0.95f, 0.0f, -0.95f);  // Superior esquerdo
+    glVertex3f(2.45f, 0.0f, -0.95f);   // Superior direito
+    glVertex3f(2.45f, -0.1f, -0.95f);  // Inferior direito
 
-    glVertex3f(-0.95f, -0.1f, 2.45f);  // vertice superior esquerdo
-    glVertex3f(-0.95f, -0.1f, -0.95f); // vertice inferior direito
-    glVertex3f(-0.95f, 0.0f, -0.95f);  // vertice inferior direito
-    glVertex3f(-0.95f, 0.0f, 2.45f);   // vertice superior esquerdo
+    glVertex3f(-0.95f, -0.1f, 2.45f); // Inferior esquerdo
+    glVertex3f(2.45f, -0.1f, 2.45f);  // Inferior direito
+    glVertex3f(2.45f, 0.0f, 2.45f);   // Superior direito
+    glVertex3f(-0.95f, 0.0f, 2.45f);  // Superior esquerdo
 
-    glVertex3f(-0.95f, -0.1f, -0.95f); // vertice inferior esquerdo
-    glVertex3f(2.45f, -0.1f, -0.95f);  // vertice inferior direito
-    glVertex3f(2.45f, -0.1f, 2.45f);   // vertice superior direito
-    glVertex3f(-0.95f, -0.1f, 2.45f);  // vertice superior esquerdo
+    glVertex3f(2.45f, -0.1f, -0.95f); // Vértice inferior esquerdo
+    glVertex3f(2.45f, 0.0f, -0.95f);  // Vértice superior esquerdo
+    glVertex3f(2.45f, 0.0f, 2.45f);   // Vértice superior direito
+    glVertex3f(2.45f, -0.1f, 2.45f);  // Vértice inferior direito
+
+    glVertex3f(-0.95f, -0.1f, 2.45f);  // Vértice inferior esquerdo
+    glVertex3f(-0.95f, 0.0f, 2.45f);   // Vértice superior esquerdo
+    glVertex3f(-0.95f, 0.0f, -0.95f);  // Vértice superior direito
+    glVertex3f(-0.95f, -0.1f, -0.95f); // Vértice inferior direito
 
     glEnd();
 
